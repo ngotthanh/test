@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AES Example</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+</head>
+<body>
+    <input type="text" id="input" placeholder="Enter text to encrypt">
+    <input type="text" id="key" placeholder="Enter encryption key">
+    <button id="encryptButton">Encrypt</button>
+    <button id="decryptButton">Decrypt</button>
+    <p id="result"></p>
+
+    <script>
+        document.getElementById('encryptButton').addEventListener('click', () => {
+            const input = document.getElementById('input').value;
+            const key = document.getElementById('key').value;
+            const encrypted = CryptoJS.AES.encrypt(input, key).toString();
+            document.getElementById('result').textContent = `Encrypted: ${encrypted}`;
+        });
+
+        document.getElementById('decryptButton').addEventListener('click', () => {
+            const encrypted = document.getElementById('result').textContent.replace('Encrypted: ', '');
+            const key = document.getElementById('key').value;
+            const decrypted = CryptoJS.AES.decrypt(encrypted, key).toString(CryptoJS.enc.Utf8);
+            document.getElementById('result').textContent += ` | Decrypted: ${decrypted}`;
+        });
+    </script>
+</body>
+</html>
