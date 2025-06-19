@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giải mã AES</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+</head>
+<body>
+    <h1>Giải mã AES</h1>
+    <input type="text" id="encrypted" placeholder="Nhập dữ liệu đã mã hóa">
+    <input type="text" id="key" placeholder="Nhập khóa giải mã">
+    <button onclick="decryptAES()">Giải mã</button>
+    <p id="result"></p>
+
+    <script>
+        function decryptAES() {
+            var encryptedData = document.getElementById("encrypted").value;
+            var key = document.getElementById("key").value;
+
+            // Giải mã dữ liệu
+            var decrypted = CryptoJS.AES.decrypt(encryptedData, key);
+            var decryptedText = decrypted.toString(CryptoJS.enc.Utf8);
+
+            // Hiển thị kết quả
+            document.getElementById("result").innerText = decryptedText ? decryptedText : "Giải mã không thành công!";
+        }
+    </script>
+</body>
+</html>
