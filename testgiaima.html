@@ -8,43 +8,28 @@
 </head>
 <body>
     <h1>Decrypt AES with CryptoJS</h1>
+    
+    <label for="decryptInput">Encrypted Text:</label>
+    <input type="text" id="decryptInput" placeholder="Enter encrypted text">
+    
+    <label for="decryptKey">Key:</label>
+    <input type="text" id="decryptKey" placeholder="Enter key">
+    
     <button id="decryptButton">Decrypt</button>
-    <p id="result"></p>
+    
+    <p id="decryptResult"></p>
 
     <script>
-        document.getElementById("decryptButton").addEventListener("click", function() {
-            // Đoạn mã hóa và mật khẩu
-            const ciphertext = "U2FsdGVkX18tUHmq0F+WcW8RCgMs94R/Am1Soo8Jan5Ug9rttnT5LaQrIE8O9Q4L/sYWVyJRwRztXq9tQiCZ6sybmWRB2YgMEtI7uWyQICI=";
-            const password = "123456";
-
-            // Giải mã Base64
-            const decoded = CryptoJS.enc.Base64.parse(ciphertext);
-            const salt = decoded.words.slice(0, 2); // Lấy salt
-            const iv = decoded.words.slice(2, 6); // Lấy IV
-            const actualCiphertext = decoded.words.slice(6); // Lấy ciphertext
-
-            // Tạo khóa từ mật khẩu và salt
-            const key = CryptoJS.PBKDF2(password, CryptoJS.enc.Hex.stringify(salt), {
-                keySize: 256 / 32,
-                iterations: 1000
-            });
+        document.getElementById('decryptButton').addEventListener('click', () => {
+            const encryptedText = document.getElementById('decryptInput').value;
+            const key = document.getElementById('decryptKey').value;
 
             // Giải mã
-            const decrypted = CryptoJS.AES.decrypt(
-                { ciphertext: CryptoJS.lib.WordArray.create(actualCiphertext) },
-                key,
-                {
-                    iv: CryptoJS.lib.WordArray.create(iv),
-                    mode: CryptoJS.mode.CBC,
-                    padding: CryptoJS.pad.Pkcs7
-                }
-            );
-
-            // Chuyển đổi kết quả thành chuỗi
+            const decrypted = CryptoJS.AES.decrypt(encryptedText, key);
             const plaintext = decrypted.toString(CryptoJS.enc.Utf8);
 
             // Hiển thị kết quả
-            document.getElementById("result").innerText = plaintext ? plaintext : "Decryption failed.";
+            document.getElementById('decryptResult').textContent = plaintext ? `Decrypted: ${plaintext}` : "Decryption failed.";
         });
     </script>
 </body>
