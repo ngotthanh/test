@@ -76,7 +76,7 @@
             const encryptedArray = new Uint8Array(atob(encryptedBase64).split("").map(c => c.charCodeAt(0)));
             const iv = new Uint8Array(atob(document.getElementById('encryptResult').textContent.split('|')[1].split(': ')[1]).split("").map(c => c.charCodeAt(0)));
 
-            // Giải mã
+            // Giải mã 
             try {
                 const decrypted = await window.crypto.subtle.decrypt({ name: 'AES-GCM', iv }, cryptoKey, encryptedArray);
                 const decryptedText = new TextDecoder().decode(decrypted);
