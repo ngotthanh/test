@@ -21,7 +21,7 @@
     </style>
 </head>
 <body>
-    <h2>AES Encryption and Decryption</h2>
+    <h2>AES Encryption and Decryption sử dụng thư viện crypto-js</h2>
 
     <div class="section">
         <h3>Encryption</h3>
@@ -46,6 +46,7 @@
             const key = document.getElementById('encryptKey').value;
 
             // Mã hóa
+            // Phương thức mã hoá cơ bản 
             const encrypted = CryptoJS.AES.encrypt(input, key).toString();
             document.getElementById('encryptResult').textContent = `Encrypted: ${encrypted}`;
 
