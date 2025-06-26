@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>AES Encryption and Decryption with IV</title>
+    <title>AES Encryption and Decryption with IV.</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
     <style>
         body {
@@ -56,7 +56,7 @@
             });
 
             // Kết hợp IV và chuỗi mã hóa
-            const result = iv.toString(CryptoJS.enc.Hex) + ':' + encrypted.toString();
+            const result = iv.toString(CryptoJS.enc.Hex) + ':' + encrypted.toString(CryptoJS.enc.Base64);
             document.getElementById('encryptResult').textContent = `Encrypted: ${result}`;
 
             // Xóa dữ liệu đầu vào để bảo mật
@@ -70,6 +70,11 @@
 
             // Tách IV và chuỗi mã hóa
             const parts = encrypted.split(':');
+            if (parts.length !== 2) {
+                document.getElementById('decryptResult').textContent = 'Invalid input format. Make sure to include IV and encrypted text.';
+                return;
+            }
+
             const iv = CryptoJS.enc.Hex.parse(parts[0]); // Đảm bảo IV được chuyển đổi đúng
             const encryptedText = parts[1];
 
