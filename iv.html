@@ -56,7 +56,7 @@
             });
 
             // Kết hợp IV và chuỗi mã hóa
-            const result = iv.toString() + ':' + encrypted.toString();
+            const result = iv.toString(CryptoJS.enc.Hex) + ':' + encrypted.toString();
             document.getElementById('encryptResult').textContent = `Encrypted: ${result}`;
 
             // Xóa dữ liệu đầu vào để bảo mật
@@ -70,7 +70,7 @@
 
             // Tách IV và chuỗi mã hóa
             const parts = encrypted.split(':');
-            const iv = CryptoJS.enc.Hex.parse(parts[0]);
+            const iv = CryptoJS.enc.Hex.parse(parts[0]); // Đảm bảo IV được chuyển đổi đúng
             const encryptedText = parts[1];
 
             // Giải mã
