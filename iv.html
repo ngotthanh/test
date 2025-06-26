@@ -7,12 +7,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
 </head>
 <body>
-    <h1>Mã hóa và Giải mã văn bản IV.</h1>
+    <h1>Mã hóa và Giải mã văn bản.iv</h1>
 
     <h2>Mã hóa</h2>
     <textarea id="inputText" rows="4" cols="50" placeholder="Nhập văn bản cần mã hóa..."></textarea><br>
     <input type="text" id="key" placeholder="Nhập khóa bí mật..."><br>
-    <input type="text" id="iv" placeholder="Nhập IV (16 ký tự)..."><br>
     <button onclick="encryptText()">Mã hóa</button>
     <h3>Kết quả mã hóa:</h3>
     <p id="encryptedResult"></p>
@@ -20,33 +19,40 @@
     <h2>Giải mã</h2>
     <textarea id="inputEncryptedText" rows="4" cols="50" placeholder="Nhập văn bản đã mã hóa..."></textarea><br>
     <input type="text" id="decryptKey" placeholder="Nhập khóa bí mật..."><br>
-    <input type="text" id="decryptIv" placeholder="Nhập IV (16 ký tự)..."><br>
     <button onclick="decryptText()">Giải mã</button>
     <h3>Kết quả giải mã:</h3>
     <p id="decryptedResult"></p>
 
     <script>
+        function generateRandomIV() {
+            return CryptoJS.lib.WordArray.random(16).toString();
+        }
+
         function encryptText() {
             const text = document.getElementById("inputText").value;
             const key = CryptoJS.enc.Utf8.parse(document.getElementById("key").value);
-            const iv = CryptoJS.enc.Utf8.parse(document.getElementById("iv").value);
+            const iv = generateRandomIV();
+            const ivWords = CryptoJS.enc.Hex.parse(iv);
 
             const encrypted = CryptoJS.AES.encrypt(text, key, {
-                iv: iv,
+                iv: ivWords,
                 mode: CryptoJS.mode.CBC,
                 padding: CryptoJS.pad.Pkcs7
             });
 
-            document.getElementById("encryptedResult").innerText = "Nội dung đã mã hóa: " + encrypted.toString();
+            // Kết hợp IV và nội dung đã mã hóa
+            const result = iv + ':' + encrypted.toString();
+            document.getElementById("encryptedResult").innerText = "Nội dung đã mã hóa: " + result;
         }
 
         function decryptText() {
-            const encryptedText = document.getElementById("inputEncryptedText").value;
+            const input = document.getElementById("inputEncryptedText").value;
+            const [iv, encryptedText] = input.split(':');
             const key = CryptoJS.enc.Utf8.parse(document.getElementById("decryptKey").value);
-            const iv = CryptoJS.enc.Utf8.parse(document.getElementById("decryptIv").value);
+            const ivWords = CryptoJS.enc.Hex.parse(iv);
 
             const decrypted = CryptoJS.AES.decrypt(encryptedText, key, {
-                iv: iv,
+                iv: ivWords,
                 mode: CryptoJS.mode.CBC,
                 padding: CryptoJS.pad.Pkcs7
             });
