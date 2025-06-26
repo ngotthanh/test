@@ -1,36 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Decrypt with CryptoJS</title>
+    <title>Giải mã AES với CryptoJS</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
 </head>
 <body>
-    <h1>Decrypt AES with CryptoJS</h1>
+    <h1>Giải mã AES</h1>
+    <label for="encrypted">Văn bản đã mã hóa:</label><br>
+    <textarea id="encrypted" rows="4" cols="50"></textarea><br><br>
     
-    <label for="decryptInput">Encrypted Text:</label>
-    <input type="text" id="decryptInput" placeholder="Enter encrypted text">
+    <label for="key">Khóa:</label><br>
+    <input type="text" id="key"><br><br>
     
-    <label for="decryptKey">Key:</label>
-    <input type="text" id="decryptKey" placeholder="Enter key">
+    <button onclick="decryptAES()">Giải mã</button>
     
-    <button id="decryptButton">Decrypt</button>
-    
-    <p id="decryptResult"></p>
+    <h2>Kết quả:</h2>
+    <div id="result"></div>
 
     <script>
-        document.getElementById('decryptButton').addEventListener('click', () => {
-            const encryptedText = document.getElementById('decryptInput').value;
-            const key = document.getElementById('decryptKey').value;
+        function decryptAES() {
+            const encryptedText = document.getElementById('encrypted').value;
+            const key = document.getElementById('key').value;
 
             // Giải mã
             const decrypted = CryptoJS.AES.decrypt(encryptedText, key);
-            const plaintext = decrypted.toString(CryptoJS.enc.Utf8);
+            const decryptedText = decrypted.toString(CryptoJS.enc.Utf8);
 
             // Hiển thị kết quả
-            document.getElementById('decryptResult').textContent = plaintext ? `Decrypted: ${plaintext}` : "Decryption failed.";
-        });
+            document.getElementById('result').innerText = decryptedText ? decryptedText : 'Giải mã không thành công!';
+        }
     </script>
 </body>
 </html>
