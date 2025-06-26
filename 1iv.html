@@ -5,36 +5,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mã hóa và Giải mã với CryptoJS</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        input, button {
+            margin: 10px 0;
+            padding: 10px;
+            width: 300px;
+        }
+    </style>
 </head>
 <body>
     <h1>Mã hóa và Giải mã với CryptoJS</h1>
+    <div>
+        <label for="plaintext">Dữ liệu cần mã hóa:</label>
+        <input type="text" id="plaintext" placeholder="Nhập dữ liệu cần mã hóa">
+    </div>
+    <div>
+        <label for="key">Khóa bí mật:</label>
+        <input type="text" id="key" placeholder="Nhập khóa bí mật">
+    </div>
+    <div>
+        <label for="iv">Vector khởi tạo (IV):</label>
+        <input type="text" id="iv" placeholder="Nhập vector khởi tạo">
+    </div>
+    <button id="encryptButton">Mã hóa</button>
+    <button id="decryptButton">Giải mã</button>
+
+    <h2>Kết quả:</h2>
+    <div>
+        <strong>Dữ liệu đã mã hóa:</strong>
+        <p id="encryptedResult"></p>
+    </div>
+    <div>
+        <strong>Dữ liệu đã giải mã:</strong>
+        <p id="decryptedResult"></p>
+    </div>
+
     <script>
-        // Khai báo key và iv
-        const key = CryptoJS.enc.Utf8.parse('your-secret-key'); // Thay 'your-secret-key' bằng key của bạn
-        const iv = CryptoJS.enc.Utf8.parse('your-iv'); // Thay 'your-iv' bằng iv của bạn
+        document.getElementById('encryptButton').addEventListener('click', function() {
+            const plaintext = document.getElementById('plaintext').value;
+            const key = CryptoJS.enc.Utf8.parse(document.getElementById('key').value);
+            const iv = CryptoJS.enc.Utf8.parse(document.getElementById('iv').value);
 
-        // Dữ liệu cần mã hóa
-        const plaintext = "Dữ liệu cần mã hóa";
+            // Mã hóa
+            const encrypted = CryptoJS.AES.encrypt(plaintext, key, {
+                iv: iv,
+                mode: CryptoJS.mode.CBC,
+                padding: CryptoJS.pad.Pkcs7
+            }).toString();
 
-        // Mã hóa
-        const encrypted = CryptoJS.AES.encrypt(plaintext, key, {
-            iv: iv,
-            mode: CryptoJS.mode.CBC,
-            padding: CryptoJS.pad.Pkcs7
-        }).toString();
-
-        console.log("Dữ liệu đã mã hóa:", encrypted);
-
-        // Giải mã
-        const decrypted = CryptoJS.AES.decrypt(encrypted, key, {
-            iv: iv,
-            mode: CryptoJS.mode.CBC,
-            padding: CryptoJS.pad.Pkcs7
+            document.getElementById('encryptedResult').innerText = encrypted;
         });
 
-        // Chuyển đổi kết quả về dạng chuỗi
-        const decryptedText = decrypted.toString(CryptoJS.enc.Utf8);
-        console.log("Dữ liệu đã giải mã:", decryptedText);
+        document.getElementById('decryptButton').addEventListener('click', function() {
+            const encrypted = document.getElementById('encryptedResult').innerText;
+            const key = CryptoJS.enc.Utf8.parse(document.getElementById('key').value);
+            const iv = CryptoJS.enc.Utf8.parse(document.getElementById('iv').value);
+
+            // Giải mã
+            const decrypted = CryptoJS.AES.decrypt(encrypted, key, {
+                iv: iv,
+                mode: CryptoJS.mode.CBC,
+                padding: CryptoJS.pad.Pkcs7
+            });
+
+            // Chuyển đổi kết quả về dạng chuỗi
+            const decryptedText = decrypted.toString(CryptoJS.enc.Utf8);
+            document.getElementById('decryptedResult').innerText = decryptedText;
+        });
     </script>
 </body>
 </html>
