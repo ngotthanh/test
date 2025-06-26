@@ -7,7 +7,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
 </head>
 <body>
-    <h1>Mã hóa và Giải mã văn bản.iv</h1>
+    <h1>Mã hóa và Giải mã văn bản iv..</h1>
 
     <h2>Mã hóa</h2>
     <textarea id="inputText" rows="4" cols="50" placeholder="Nhập văn bản cần mã hóa..."></textarea><br>
@@ -58,7 +58,11 @@
             });
 
             const originalText = decrypted.toString(CryptoJS.enc.Utf8);
-            document.getElementById("decryptedResult").innerText = "Nội dung đã giải mã: " + originalText;
+            if (originalText) {
+                document.getElementById("decryptedResult").innerText = "Nội dung đã giải mã: " + originalText;
+            } else {
+                document.getElementById("decryptedResult").innerText = "Giải mã không thành công. Vui lòng kiểm tra khóa và nội dung đã mã hóa.";
+            }
         }
     </script>
 </body>
