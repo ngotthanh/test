@@ -7,8 +7,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 </head>
 <body>
-    <h1>Giải mã AES với CryptoJS</h1>
-    <input type="text" id="key" placeholder="Nhập khóa (16 ký tự)">
+    <h1>Giải mã AES với CryptoJS.</h1>
+    <input type="text" id="key" placeholder="Nhập khóa">
     <input type="text" id="ciphertext" placeholder="Nhập dữ liệu mã hóa">
     <button onclick="decrypt()">Giải mã</button>
     <h2>Kết quả giải mã:</h2>
@@ -18,12 +18,6 @@
         function decrypt() {
             const keyInput = document.getElementById('key').value;
             const ciphertext = document.getElementById('ciphertext').value;
-
-            // Kiểm tra độ dài khóa
-            if (keyInput.length !== 16) {
-                alert('Khóa phải có độ dài 16 ký tự!');
-                return;
-            }
 
             // Tách IV và dữ liệu mã hóa
             const parts = ciphertext.split(':');
