@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giải mã với CryptoJS</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+</head>
+<body>
+    <h1>Giải mã nội dung mã hóa</h1>
+    <div>
+        <label for="encryptedInput">Nội dung mã hóa:</label><br>
+        <textarea id="encryptedInput" rows="4" cols="50"></textarea>
+    </div>
+    <div>
+        <label for="keyInput">Khóa giải mã:</label><br>
+        <input type="text" id="keyInput">
+    </div>
+    <div>
+        <label for="ivInput">IV:</label><br>
+        <input type="text" id="ivInput">
+    </div>
+    <button onclick="decrypt()">Giải mã</button>
+    <h2>Kết quả:</h2>
+    <div id="result"></div>
+
+    <script>
+        function decrypt() {
+            // Lấy giá trị từ các input
+            var encryptedData = document.getElementById('encryptedInput').value;
+            var key = document.getElementById('keyInput').value;
+            var iv = document.getElementById('ivInput').value;
+
+            // Giải mã
+            var decrypted = CryptoJS.AES.decrypt(encryptedData, CryptoJS.enc.Utf8.parse(key), {
+                iv: CryptoJS.enc.Utf8.parse(iv),
+                mode: CryptoJS.mode.CBC,
+                padding: CryptoJS.pad.Pkcs7
+            });
+
+            // Chuyển đổi kết quả về định dạng chuỗi
+            var decryptedText = decrypted.toString(CryptoJS.enc.Utf8);
+
+            // Hiển thị kết quả
+            document.getElementById('result').innerText = decryptedText ? decryptedText : 'Giải mã không thành công!';
+        }
+    </script>
+</body>
+</html>
