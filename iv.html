@@ -7,7 +7,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
 </head>
 <body>
-    <h1>Mã hóa và Giải mã văn bản iv...</h1>
+    <h1>Mã hóa và Giải mã văn bản iv.....</h1>
 
     <h2>Mã hóa</h2>
     <textarea id="inputText" rows="4" cols="50" placeholder="Nhập văn bản cần mã hóa..."></textarea><br>
@@ -25,23 +25,22 @@
 
     <script>
         function generateRandomIV() {
-            return CryptoJS.lib.WordArray.random(16).toString();
+            return CryptoJS.lib.WordArray.random(16);
         }
 
         function encryptText() {
             const text = document.getElementById("inputText").value;
             const key = CryptoJS.enc.Utf8.parse(document.getElementById("key").value);
             const iv = generateRandomIV();
-            const ivWords = CryptoJS.enc.Hex.parse(iv);
 
             const encrypted = CryptoJS.AES.encrypt(text, key, {
-                iv: ivWords,
+                iv: iv,
                 mode: CryptoJS.mode.CBC,
                 padding: CryptoJS.pad.Pkcs7
             });
 
             // Kết hợp IV và nội dung đã mã hóa
-            const result = iv + ':' + encrypted.toString();
+            const result = iv.toString() + ':' + encrypted.toString();
             document.getElementById("encryptedResult").innerText = "Nội dung đã mã hóa: " + result;
         }
 
