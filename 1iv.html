@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mã hóa và Giải mã với CryptoJS</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+</head>
+<body>
+    <h1>Mã hóa và Giải mã với CryptoJS</h1>
+    <script>
+        // Khai báo key và iv
+        const key = CryptoJS.enc.Utf8.parse('your-secret-key'); // Thay 'your-secret-key' bằng key của bạn
+        const iv = CryptoJS.enc.Utf8.parse('your-iv'); // Thay 'your-iv' bằng iv của bạn
+
+        // Dữ liệu cần mã hóa
+        const plaintext = "Dữ liệu cần mã hóa";
+
+        // Mã hóa
+        const encrypted = CryptoJS.AES.encrypt(plaintext, key, {
+            iv: iv,
+            mode: CryptoJS.mode.CBC,
+            padding: CryptoJS.pad.Pkcs7
+        }).toString();
+
+        console.log("Dữ liệu đã mã hóa:", encrypted);
+
+        // Giải mã
+        const decrypted = CryptoJS.AES.decrypt(encrypted, key, {
+            iv: iv,
+            mode: CryptoJS.mode.CBC,
+            padding: CryptoJS.pad.Pkcs7
+        });
+
+        // Chuyển đổi kết quả về dạng chuỗi
+        const decryptedText = decrypted.toString(CryptoJS.enc.Utf8);
+        console.log("Dữ liệu đã giải mã:", decryptedText);
+    </script>
+</body>
+</html>
