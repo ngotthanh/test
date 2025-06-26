@@ -1,99 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <title>AES Encryption and Decryption with IV.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mã hóa và Giải mã với CryptoJS</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        input, button {
-            margin: 5px 0;
-            padding: 10px;
-            width: 300px;
-        }
-        .section {
-            margin-bottom: 20px;
-        }
-    </style>
 </head>
 <body>
-    <h2>AES Encryption and Decryption with IV</h2>
+    <h1>Mã hóa và Giải mã văn bản IV.</h1>
 
-    <div class="section">
-        <h3>Encryption</h3>
-        <input type="text" id="encryptInput" placeholder="Enter text to encrypt" autocomplete="off">
-        <input type="text" id="encryptKey" placeholder="Enter encryption key" autocomplete="off">
-        <button id="encryptButton">Encrypt</button>
-        <p id="encryptResult"></p>
-    </div>
+    <h2>Mã hóa</h2>
+    <textarea id="inputText" rows="4" cols="50" placeholder="Nhập văn bản cần mã hóa..."></textarea><br>
+    <input type="text" id="key" placeholder="Nhập khóa bí mật..."><br>
+    <input type="text" id="iv" placeholder="Nhập IV (16 ký tự)..."><br>
+    <button onclick="encryptText()">Mã hóa</button>
+    <h3>Kết quả mã hóa:</h3>
+    <p id="encryptedResult"></p>
 
-    <div class="section">
-        <h3>Decryption</h3>
-        <input type="text" id="decryptInput" placeholder="Enter text to decrypt" autocomplete="off">
-        <input type="text" id="decryptKey" placeholder="Enter decryption key" autocomplete="off">
-        <button id="decryptButton">Decrypt</button>
-        <p id="decryptResult"></p>
-    </div>
+    <h2>Giải mã</h2>
+    <textarea id="inputEncryptedText" rows="4" cols="50" placeholder="Nhập văn bản đã mã hóa..."></textarea><br>
+    <input type="text" id="decryptKey" placeholder="Nhập khóa bí mật..."><br>
+    <input type="text" id="decryptIv" placeholder="Nhập IV (16 ký tự)..."><br>
+    <button onclick="decryptText()">Giải mã</button>
+    <h3>Kết quả giải mã:</h3>
+    <p id="decryptedResult"></p>
 
     <script>
-        // Mã hóa
-        document.getElementById('encryptButton').addEventListener('click', () => {
-            const input = document.getElementById('encryptInput').value;
-            const key = document.getElementById('encryptKey').value;
+        function encryptText() {
+            const text = document.getElementById("inputText").value;
+            const key = CryptoJS.enc.Utf8.parse(document.getElementById("key").value);
+            const iv = CryptoJS.enc.Utf8.parse(document.getElementById("iv").value);
 
-            // Tạo IV ngẫu nhiên
-            const iv = CryptoJS.lib.WordArray.random(128 / 8); // 16 bytes for AES
-
-            // Mã hóa
-            const encrypted = CryptoJS.AES.encrypt(input, CryptoJS.enc.Utf8.parse(key), {
+            const encrypted = CryptoJS.AES.encrypt(text, key, {
                 iv: iv,
                 mode: CryptoJS.mode.CBC,
                 padding: CryptoJS.pad.Pkcs7
             });
 
-            // Kết hợp IV và chuỗi mã hóa
-            const result = iv.toString(CryptoJS.enc.Hex) + ':' + encrypted.toString(CryptoJS.enc.Base64);
-            document.getElementById('encryptResult').textContent = `Encrypted: ${result}`;
+            document.getElementById("encryptedResult").innerText = "Nội dung đã mã hóa: " + encrypted.toString();
+        }
 
-            // Xóa dữ liệu đầu vào để bảo mật
-            document.getElementById('encryptInput').value = '';
-        });
+        function decryptText() {
+            const encryptedText = document.getElementById("inputEncryptedText").value;
+            const key = CryptoJS.enc.Utf8.parse(document.getElementById("decryptKey").value);
+            const iv = CryptoJS.enc.Utf8.parse(document.getElementById("decryptIv").value);
 
-        // Giải mã
-        document.getElementById('decryptButton').addEventListener('click', () => {
-            const encrypted = document.getElementById('decryptInput').value;
-            const key = document.getElementById('decryptKey').value;
-
-            // Tách IV và chuỗi mã hóa
-            const parts = encrypted.split(':');
-            if (parts.length !== 2) {
-                document.getElementById('decryptResult').textContent = 'Invalid input format. Make sure to include IV and encrypted text.';
-                return;
-            }
-
-            const iv = CryptoJS.enc.Hex.parse(parts[0]); // Đảm bảo IV được chuyển đổi đúng
-            const encryptedText = parts[1];
-
-            // Giải mã
-            const decrypted = CryptoJS.AES.decrypt(encryptedText, CryptoJS.enc.Utf8.parse(key), {
+            const decrypted = CryptoJS.AES.decrypt(encryptedText, key, {
                 iv: iv,
                 mode: CryptoJS.mode.CBC,
                 padding: CryptoJS.pad.Pkcs7
-            }).toString(CryptoJS.enc.Utf8);
+            });
 
-            if (decrypted) {
-                document.getElementById('decryptResult').textContent = `Decrypted: ${decrypted}`;
-            } else {
-                document.getElementById('decryptResult').textContent = 'Decryption failed. Check your key and encrypted text.';
-            }
-
-            // Xóa dữ liệu đầu vào để bảo mật
-            document.getElementById('decryptInput').value = '';
-        });
+            const originalText = decrypted.toString(CryptoJS.enc.Utf8);
+            document.getElementById("decryptedResult").innerText = "Nội dung đã giải mã: " + originalText;
+        }
     </script>
 </body>
 </html>
