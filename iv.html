@@ -7,7 +7,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
 </head>
 <body>
-    <h1>Mã hóa và Giải mã văn bản iv.....</h1>
+    <h1>Mã hóa và Giải mã văn bản iv.</h1>
 
     <h2>Mã hóa</h2>
     <textarea id="inputText" rows="4" cols="50" placeholder="Nhập văn bản cần mã hóa..."></textarea><br>
@@ -40,18 +40,18 @@
             });
 
             // Kết hợp IV và nội dung đã mã hóa
-            const result = iv.toString() + ':' + encrypted.toString();
+            const result = iv.toString(CryptoJS.enc.Hex) + ':' + encrypted.toString();
             document.getElementById("encryptedResult").innerText = "Nội dung đã mã hóa: " + result;
         }
 
         function decryptText() {
             const input = document.getElementById("inputEncryptedText").value;
-            const [iv, encryptedText] = input.split(':');
+            const [ivHex, encryptedText] = input.split(':');
             const key = CryptoJS.enc.Utf8.parse(document.getElementById("decryptKey").value);
-            const ivWords = CryptoJS.enc.Hex.parse(iv);
+            const iv = CryptoJS.enc.Hex.parse(ivHex);
 
             const decrypted = CryptoJS.AES.decrypt(encryptedText, key, {
-                iv: ivWords,
+                iv: iv,
                 mode: CryptoJS.mode.CBC,
                 padding: CryptoJS.pad.Pkcs7
             });
