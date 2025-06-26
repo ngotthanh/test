@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>AES Encryption and Decryption with IV</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        input, button {
+            margin: 5px 0;
+            padding: 10px;
+            width: 300px;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h2>AES Encryption and Decryption with IV</h2>
+
+    <div class="section">
+        <h3>Encryption</h3>
+        <input type="text" id="encryptInput" placeholder="Enter text to encrypt" autocomplete="off">
+        <input type="text" id="encryptKey" placeholder="Enter encryption key" autocomplete="off">
+        <button id="encryptButton">Encrypt</button>
+        <p id="encryptResult"></p>
+    </div>
+
+    <div class="section">
+        <h3>Decryption</h3>
+        <input type="text" id="decryptInput" placeholder="Enter text to decrypt" autocomplete="off">
+        <input type="text" id="decryptKey" placeholder="Enter decryption key" autocomplete="off">
+        <button id="decryptButton">Decrypt</button>
+        <p id="decryptResult"></p>
+    </div>
+
+    <script>
+        // Mã hóa
+        document.getElementById('encryptButton').addEventListener('click', () => {
+            const input = document.getElementById('encryptInput').value;
+            const key = document.getElementById('encryptKey').value;
+
+            // Tạo IV ngẫu nhiên
+            const iv = CryptoJS.lib.WordArray.random(128 / 8); // 16 bytes for AES
+
+            // Mã hóa
+            const encrypted = CryptoJS.AES.encrypt(input, CryptoJS.enc.Utf8.parse(key), {
+                iv: iv,
+                mode: CryptoJS.mode.CBC,
+                padding: CryptoJS.pad.Pkcs7
+            });
+
+            // Kết hợp IV và chuỗi mã hóa
+            const result = iv.toString() + ':' + encrypted.toString();
+            document.getElementById('encryptResult').textContent = `Encrypted: ${result}`;
+
+            // Xóa dữ liệu đầu vào để bảo mật
+            document.getElementById('encryptInput').value = '';
+        });
+
+        // Giải mã
+        document.getElementById('decryptButton').addEventListener('click', () => {
+            const encrypted = document.getElementById('decryptInput').value;
+            const key = document.getElementById('decryptKey').value;
+
+            // Tách IV và chuỗi mã hóa
+            const parts = encrypted.split(':');
+            const iv = CryptoJS.enc.Hex.parse(parts[0]);
+            const encryptedText = parts[1];
+
+            // Giải mã
+            const decrypted = CryptoJS.AES.decrypt(encryptedText, CryptoJS.enc.Utf8.parse(key), {
+                iv: iv,
+                mode: CryptoJS.mode.CBC,
+                padding: CryptoJS.pad.Pkcs7
+            }).toString(CryptoJS.enc.Utf8);
+
+            if (decrypted) {
+                document.getElementById('decryptResult').textContent = `Decrypted: ${decrypted}`;
+            } else {
+                document.getElementById('decryptResult').textContent = 'Decryption failed. Check your key and encrypted text.';
+            }
+
+            // Xóa dữ liệu đầu vào để bảo mật
+            document.getElementById('decryptInput').value = '';
+        });
+    </script>
+</body>
+</html>
