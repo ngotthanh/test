@@ -3,65 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mã hóa và Giải mã với CryptoJS</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+    <title>Mã hóa AES với CryptoJS</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 </head>
 <body>
-    <h1>Mã hóa và Giải mã văn bản.</h1>
-
-    <h2>Mã hóa</h2>
-    <textarea id="inputText" rows="4" cols="50" placeholder="Nhập văn bản cần mã hóa..."></textarea><br>
-    <input type="text" id="key" placeholder="Nhập khóa bí mật..."><br>
-    <button onclick="encryptText()">Mã hóa</button>
-    <h3>Kết quả mã hóa:</h3>
-    <p id="encryptedResult"></p>
-
-    <h2>Giải mã</h2>
-    <textarea id="inputEncryptedText" rows="4" cols="50" placeholder="Nhập văn bản đã mã hóa..."></textarea><br>
-    <input type="text" id="decryptKey" placeholder="Nhập khóa bí mật..."><br>
-    <button onclick="decryptText()">Giải mã</button>
-    <h3>Kết quả giải mã:</h3>
-    <p id="decryptedResult"></p>
+    <h1>Mã hóa AES với CryptoJS</h1>
+    <input type="text" id="key" placeholder="Nhập khóa (16 ký tự)">
+    <input type="text" id="plaintext" placeholder="Nhập văn bản cần mã hóa">
+    <button onclick="encrypt()">Mã hóa</button>
+    <h2>Kết quả mã hóa:</h2>
+    <p id="encrypted"></p>
 
     <script>
-        function generateRandomIV() {
-            return CryptoJS.lib.WordArray.random(16);
-        }
+        function encrypt() {
+            const keyInput = document.getElementById('key').value;
+            const plaintext = document.getElementById('plaintext').value;
 
-        function encryptText() {
-            const text = document.getElementById("inputText").value;
-            const key = CryptoJS.enc.Utf8.parse(document.getElementById("key").value);
-            const iv = generateRandomIV();
-
-            const encrypted = CryptoJS.AES.encrypt(text, key, {
-                iv: iv,
-                mode: CryptoJS.mode.CBC,
-                padding: CryptoJS.pad.Pkcs7
-            });
-
-            // Kết hợp IV và nội dung đã mã hóa
-            const result = iv.toString(CryptoJS.enc.Hex) + ':' + encrypted.toString();
-            document.getElementById("encryptedResult").innerText = "Nội dung đã mã hóa: " + result;
-        }
-
-        function decryptText() {
-            const input = document.getElementById("inputEncryptedText").value;
-            const [ivHex, encryptedText] = input.split(':');
-            const key = CryptoJS.enc.Utf8.parse(document.getElementById("decryptKey").value);
-            const iv = CryptoJS.enc.Hex.parse(ivHex); // Chuyển đổi IV từ hex
-
-            const decrypted = CryptoJS.AES.decrypt(encryptedText, key, {
-                iv: iv,
-                mode: CryptoJS.mode.CBC,
-                padding: CryptoJS.pad.Pkcs7
-            });
-
-            const originalText = decrypted.toString(CryptoJS.enc.Utf8);
-            if (originalText) {
-                document.getElementById("decryptedResult").innerText = "Nội dung đã giải mã: " + originalText;
-            } else {
-                document.getElementById("decryptedResult").innerText = "Giải mã không thành công. Vui lòng kiểm tra khóa và nội dung đã mã hóa.";
+            // Kiểm tra độ dài khóa
+            if (keyInput.length !== 16) {
+                alert('Khóa phải có độ dài 16 ký tự!');
+                return;
             }
+
+            const key = CryptoJS.enc.Utf8.parse(keyInput); // Chuyển đổi khóa thành WordArray
+            const iv = CryptoJS.lib.WordArray.random(16); // Tạo IV ngẫu nhiên 16 byte
+
+            const encrypted = CryptoJS.AES.encrypt(plaintext, key, {
+                iv: iv,
+                mode: CryptoJS.mode.CBC,
+                padding: CryptoJS.pad.Pkcs7
+            });
+
+            // Kết hợp IV và dữ liệu mã hóa
+            const result = iv.toString() + ':' + encrypted.toString();
+            document.getElementById('encrypted').innerText = result;
         }
     </script>
 </body>
