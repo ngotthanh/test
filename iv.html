@@ -7,7 +7,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
 </head>
 <body>
-    <h1>Mã hóa và Giải mã văn bản iv.</h1>
+    <h1>Mã hóa và Giải mã văn bản.</h1>
 
     <h2>Mã hóa</h2>
     <textarea id="inputText" rows="4" cols="50" placeholder="Nhập văn bản cần mã hóa..."></textarea><br>
@@ -48,7 +48,7 @@
             const input = document.getElementById("inputEncryptedText").value;
             const [ivHex, encryptedText] = input.split(':');
             const key = CryptoJS.enc.Utf8.parse(document.getElementById("decryptKey").value);
-            const iv = CryptoJS.enc.Hex.parse(ivHex);
+            const iv = CryptoJS.enc.Hex.parse(ivHex); // Chuyển đổi IV từ hex
 
             const decrypted = CryptoJS.AES.decrypt(encryptedText, key, {
                 iv: iv,
