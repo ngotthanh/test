@@ -16,143 +16,183 @@
 <body>
 
     <h3>Mã hoá AES Encryption and Decryption sử dụng thư viện crypto-js cục bộ. </h3>
-    
-    <button id="toggleShow">Show All</button>
 
-    <div class="section">
-        <h3>Encryption (Mã hoá)</h3>
-        <input type="password" id="encryptInput" placeholder="Enter text to encrypt" autocomplete="off">
-        <input type="password" id="encryptKey" placeholder="Enter encryption key" autocomplete="off">
-        <button id="encryptButton">Encrypt (Mã hoá)</button>
-        <br>
-        <p id="encryptResult" class="result">Encrypted: </p>
-        <br>
-        <button id="copyEncryptResult" style="display:none;">Copy Encrypted Text</button>
-    </div>
+<button id="toggleShow">Show All</button>
 
-    <div class="section">
-        <h3>Decryption (Giải mã)</h3>
-        <input type="password" id="decryptInput" placeholder="Enter text to decrypt" autocomplete="off">
-        <input type="password" id="decryptKey" placeholder="Enter decryption key" autocomplete="off">
-        <button id="decryptButton">Decrypt (Giải mã)</button>
-        <br>
-        <p id="decryptResult" class="result">Decrypted: </p>
-        <br>
-        <button id="copyDecryptResult" style="display:none;">Copy Decrypted Text</button>
-    </div>
+<div class="section">
+    <h3>Encryption (Mã hoá)</h3>
+    <input type="password" id="encryptInput" placeholder="Enter text to encrypt" autocomplete="off">
+    <input type="password" id="encryptKey" placeholder="Enter encryption key" autocomplete="off">
+    <input type="password" id="encryptKeyConfirm" placeholder="Re-enter encryption key" autocomplete="off">
+    <div class="hint">Cả hai trường khóa phải giống nhau để kích hoạt nút mã hoá.</div>
+    <div id="encryptKeyError" class="error">Keys do not match.</div>
+    <button id="encryptButton" disabled>Encrypt (Mã hoá)</button>
+    <br>
+    <p id="encryptResult" class="result">Encrypted: </p>
+    <br>
+    <button id="copyEncryptResult" style="display:none;">Copy Encrypted Text</button>
+</div>
 
-    <script>
-        // trạng thái show/hide toàn bộ nội dung
-        let showAll = false;
+<div class="section">
+    <h3>Decryption (Giải mã)</h3>
+    <input type="password" id="decryptInput" placeholder="Enter text to decrypt" autocomplete="off">
+    <input type="password" id="decryptKey" placeholder="Enter decryption key" autocomplete="off">
+    <button id="decryptButton">Decrypt (Giải mã)</button>
+    <br>
+    <p id="decryptResult" class="result">Decrypted: </p>
+    <br>
+    <button id="copyDecryptResult" style="display:none;">Copy Decrypted Text</button>
+</div>
 
-        const toggleBtn = document.getElementById('toggleShow');
-        const encryptInput = document.getElementById('encryptInput');
-        const encryptKey = document.getElementById('encryptKey');
-        const decryptInput = document.getElementById('decryptInput');
-        const decryptKey = document.getElementById('decryptKey');
-        const encryptResultP = document.getElementById('encryptResult');
-        const decryptResultP = document.getElementById('decryptResult');
-        const copyEncryptBtn = document.getElementById('copyEncryptResult');
-        const copyDecryptBtn = document.getElementById('copyDecryptResult');
+<script>
+    // trạng thái show/hide toàn bộ nội dung
+    let showAll = false;
 
-        // lưu giá trị thật để còn hiển thị khi bật showAll
-        let lastEncrypted = '';
-        let lastDecrypted = '';
+    const toggleBtn = document.getElementById('toggleShow');
 
-        function mask(text) {
-            if (!text) return '';
-            return '*'.repeat(Math.max(8, text.length)); // che bằng dấu *
-        }
+    // encryption elements
+    const encryptInput = document.getElementById('encryptInput');
+    const encryptKey = document.getElementById('encryptKey');
+    const encryptKeyConfirm = document.getElementById('encryptKeyConfirm');
+    const encryptButton = document.getElementById('encryptButton');
+    const encryptResultP = document.getElementById('encryptResult');
+    const copyEncryptBtn = document.getElementById('copyEncryptResult');
+    const encryptKeyError = document.getElementById('encryptKeyError');
 
-        function updateDisplay() {
-            // inputs: khi showAll=true => type="text", ngược lại => type="password"
-            const type = showAll ? 'text' : 'password';
-            encryptInput.type = type;
-            encryptKey.type = type;
-            decryptInput.type = type;
-            decryptKey.type = type;
+    // decryption elements
+    const decryptInput = document.getElementById('decryptInput');
+    const decryptKey = document.getElementById('decryptKey');
+    const decryptButton = document.getElementById('decryptButton');
+    const decryptResultP = document.getElementById('decryptResult');
+    const copyDecryptBtn = document.getElementById('copyDecryptResult');
 
-            // kết quả: hiển thị thực hoặc che
-            encryptResultP.textContent = `Encrypted: ${ showAll ? lastEncrypted || mask('') : (lastEncrypted ? mask(lastEncrypted) : '') }`;
-            decryptResultP.textContent = `Decrypted: ${ showAll ? lastDecrypted || mask('') : (lastDecrypted ? mask(lastDecrypted) : '') }`;
-        }
+    // lưu giá trị thật để còn hiển thị khi bật showAll
+    let lastEncrypted = '';
+    let lastDecrypted = '';
 
-        toggleBtn.addEventListener('click', () => {
-            showAll = !showAll;
-            toggleBtn.textContent = showAll ? 'Hide All' : 'Show All';
-            updateDisplay();
-        });
+    function mask(text) {
+        if (!text) return '';
+        return '*'.repeat(Math.max(8, text.length)); // che bằng dấu *
+    }
 
-        // Mã hóa
-        document.getElementById('encryptButton').addEventListener('click', () => {
-            const input = encryptInput.value;
-            const key = encryptKey.value;
+    function updateDisplay() {
+        // inputs: khi showAll=true => type="text", ngược lại => type="password"
+        const type = showAll ? 'text' : 'password';
+        encryptInput.type = type;
+        encryptKey.type = type;
+        encryptKeyConfirm.type = type;
+        decryptInput.type = type;
+        decryptKey.type = type;
 
-            const encrypted = CryptoJS.AES.encrypt(input, key).toString();
-            lastEncrypted = encrypted;
-            // nếu đang showAll thì hiển thị chuỗi thực, ngược lại che
-            encryptResultP.textContent = `Encrypted: ${ showAll ? encrypted : mask(encrypted) }`;
-            copyEncryptBtn.style.display = 'inline-block';
+        // kết quả: hiển thị thực hoặc che
+        encryptResultP.textContent = `Encrypted: ${ showAll ? lastEncrypted || mask('') : (lastEncrypted ? mask(lastEncrypted) : '') }`;
+        decryptResultP.textContent = `Decrypted: ${ showAll ? lastDecrypted || mask('') : (lastDecrypted ? mask(lastDecrypted) : '') }`;
+    }
 
-            // Xóa dữ liệu đầu vào để bảo mật (vẫn giữ trong lastEncrypted)
-            encryptInput.value = '';
-        });
-
-        // Sao chép kết quả mã hóa
-        copyEncryptBtn.addEventListener('click', () => {
-            const textToCopy = lastEncrypted;
-            if (!textToCopy) {
-                alert('No encrypted text to copy.');
-                return;
-            }
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                alert('Encrypted text copied to clipboard!');
-            }).catch(err => {
-                console.error('Failed to copy: ', err);
-            });
-        });
-
-        // Giải mã
-        document.getElementById('decryptButton').addEventListener('click', () => {
-            const encrypted = decryptInput.value;
-            const key = decryptKey.value;
-
-            let decrypted = '';
-            try {
-                decrypted = CryptoJS.AES.decrypt(encrypted, key).toString(CryptoJS.enc.Utf8);
-            } catch (e) {
-                decrypted = '';
-            }
-
-            if (decrypted) {
-                lastDecrypted = decrypted;
-                decryptResultP.textContent = `Decrypted: ${ showAll ? decrypted : mask(decrypted) }`;
-                copyDecryptBtn.style.display = 'inline-block';
-            } else {
-                lastDecrypted = '';
-                decryptResultP.textContent = 'Decryption failed. Check your key and encrypted text.';
-                copyDecryptBtn.style.display = 'none';
-            }
-
-            decryptInput.value = '';
-        });
-
-        // Sao chép kết quả giải mã
-        copyDecryptBtn.addEventListener('click', () => {
-            const textToCopy = lastDecrypted;
-            if (!textToCopy) {
-                alert('No decrypted text to copy.');
-                return;
-            }
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                alert('Decrypted text copied to clipboard!');
-            }).catch(err => {
-                console.error('Failed to copy: ', err);
-            });
-        });
-
-        // khởi tạo hiển thị
+    toggleBtn.addEventListener('click', () => {
+        showAll = !showAll;
+        toggleBtn.textContent = showAll ? 'Hide All' : 'Show All';
         updateDisplay();
-    </script>
+    });
+
+    // validate encryption keys: bật nút khi 2 key giống nhau và không rỗng
+    function validateEncryptKeys() {
+        const k1 = encryptKey.value;
+        const k2 = encryptKeyConfirm.value;
+
+        if (!k1 || !k2) {
+            encryptButton.disabled = true;
+            encryptKeyError.style.display = 'none';
+            return;
+        }
+
+        if (k1 === k2) {
+            encryptButton.disabled = false;
+            encryptKeyError.style.display = 'none';
+        } else {
+            encryptButton.disabled = true;
+            encryptKeyError.style.display = 'block';
+        }
+    }
+
+    encryptKey.addEventListener('input', validateEncryptKeys);
+    encryptKeyConfirm.addEventListener('input', validateEncryptKeys);
+
+    // Mã hóa
+    encryptButton.addEventListener('click', () => {
+        const input = encryptInput.value;
+        const key = encryptKey.value;
+
+        const encrypted = CryptoJS.AES.encrypt(input, key).toString();
+        lastEncrypted = encrypted;
+        // nếu đang showAll thì hiển thị chuỗi thực, ngược lại che
+        encryptResultP.textContent = `Encrypted: ${ showAll ? encrypted : mask(encrypted) }`;
+        copyEncryptBtn.style.display = 'inline-block';
+
+        // Xóa dữ liệu đầu vào để bảo mật (vẫn giữ trong lastEncrypted)
+        encryptInput.value = '';
+        // xóa cả hai trường khóa sau khi mã hoá
+        encryptKey.value = '';
+        encryptKeyConfirm.value = '';
+        validateEncryptKeys();
+    });
+
+    // Sao chép kết quả mã hóa
+    copyEncryptBtn.addEventListener('click', () => {
+        const textToCopy = lastEncrypted;
+        if (!textToCopy) {
+            alert('No encrypted text to copy.');
+            return;
+        }
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            alert('Encrypted text copied to clipboard!');
+        }).catch(err => {
+            console.error('Failed to copy: ', err);
+        });
+    });
+
+    // Giải mã
+    decryptButton.addEventListener('click', () => {
+        const encrypted = decryptInput.value;
+        const key = decryptKey.value;
+
+        let decrypted = '';
+        try {
+            decrypted = CryptoJS.AES.decrypt(encrypted, key).toString(CryptoJS.enc.Utf8);
+        } catch (e) {
+            decrypted = '';
+        }
+
+        if (decrypted) {
+            lastDecrypted = decrypted;
+            decryptResultP.textContent = `Decrypted: ${ showAll ? decrypted : mask(decrypted) }`;
+            copyDecryptBtn.style.display = 'inline-block';
+        } else {
+            lastDecrypted = '';
+            decryptResultP.textContent = 'Decryption failed. Check your key and encrypted text.';
+            copyDecryptBtn.style.display = 'none';
+        }
+
+        decryptInput.value = '';
+    });
+
+    // Sao chép kết quả giải mã
+    copyDecryptBtn.addEventListener('click', () => {
+        const textToCopy = lastDecrypted;
+        if (!textToCopy) {
+            alert('No decrypted text to copy.');
+            return;
+        }
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            alert('Decrypted text copied to clipboard!');
+        }).catch(err => {
+            console.error('Failed to copy: ', err);
+        });
+    });
+
+    // khởi tạo hiển thị
+    updateDisplay();
+</script>
+
 </body>
 </html>
