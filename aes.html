@@ -60,7 +60,7 @@
         let lastDecrypted = '';
 
         function mask(text) {
-            if (!text) return '00000';
+            if (!text) return '';
             return '*'.repeat(Math.max(8, text.length)); // che bằng dấu *
         }
 
@@ -73,8 +73,8 @@
             decryptKey.type = type;
 
             // kết quả: hiển thị thực hoặc che
-            encryptResultP.textContent = `Encrypted: ${ showAll ? lastEncrypted || mask('') : (lastEncrypted ? mask(lastEncrypted) : '********') }`;
-            decryptResultP.textContent = `Decrypted: ${ showAll ? lastDecrypted || mask('') : (lastDecrypted ? mask(lastDecrypted) : '********') }`;
+            encryptResultP.textContent = `Encrypted: ${ showAll ? lastEncrypted || mask('') : (lastEncrypted ? mask(lastEncrypted) : '') }`;
+            decryptResultP.textContent = `Decrypted: ${ showAll ? lastDecrypted || mask('') : (lastDecrypted ? mask(lastDecrypted) : '') }`;
         }
 
         toggleBtn.addEventListener('click', () => {
