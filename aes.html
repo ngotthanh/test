@@ -14,16 +14,17 @@
     </style>
 </head>
 <body>
-    <button id="toggleShow">Show All</button>
 
-    <h2>AES Encryption and Decryption sử dụng thư viện crypto-js cục bộ.</h2>
+    <h3>Mã hoá AES Encryption and Decryption sử dụng thư viện crypto-js cục bộ. </h3>
+    
+    <button id="toggleShow">Show All (Ẩn/Hiện nội dung)</button>
 
     <div class="section">
         <h3>Encryption</h3>
         <input type="password" id="encryptInput" placeholder="Enter text to encrypt" autocomplete="off">
         <input type="password" id="encryptKey" placeholder="Enter encryption key" autocomplete="off">
-        <button id="encryptButton">Encrypt</button>
-        <p id="encryptResult" class="result">Encrypted: ********</p>
+        <button id="encryptButton">Encrypt (Mã hoá)</button>
+        <p id="encryptResult" class="result">Encrypted: </p>
         <button id="copyEncryptResult" style="display:none;">Copy Encrypted Text</button>
     </div>
 
@@ -31,8 +32,8 @@
         <h3>Decryption</h3>
         <input type="password" id="decryptInput" placeholder="Enter text to decrypt" autocomplete="off">
         <input type="password" id="decryptKey" placeholder="Enter decryption key" autocomplete="off">
-        <button id="decryptButton">Decrypt</button>
-        <p id="decryptResult" class="result">Decrypted: ********</p>
+        <button id="decryptButton">Decrypt (Giải mã)</button>
+        <p id="decryptResult" class="result">Decrypted: </p>
         <button id="copyDecryptResult" style="display:none;">Copy Decrypted Text</button>
     </div>
 
