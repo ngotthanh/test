@@ -24,6 +24,7 @@
         <input type="password" id="encryptInput" placeholder="Enter text to encrypt" autocomplete="off">
         <input type="password" id="encryptKey" placeholder="Enter encryption key" autocomplete="off">
         <button id="encryptButton">Encrypt (Mã hoá)</button>
+        <br>
         <p id="encryptResult" class="result">Encrypted: </p>
         <button id="copyEncryptResult" style="display:none;">Copy Encrypted Text</button>
     </div>
@@ -33,6 +34,7 @@
         <input type="password" id="decryptInput" placeholder="Enter text to decrypt" autocomplete="off">
         <input type="password" id="decryptKey" placeholder="Enter decryption key" autocomplete="off">
         <button id="decryptButton">Decrypt (Giải mã)</button>
+        <br>
         <p id="decryptResult" class="result">Decrypted: </p>
         <button id="copyDecryptResult" style="display:none;">Copy Decrypted Text</button>
     </div>
@@ -57,7 +59,7 @@
 
         function mask(text) {
             if (!text) return '********';
-            return '*'.repeat(Math.max(8, text.length)); // che bằng dấu *
+            return '*'.repeat(Math.max(999, text.length)); // che bằng dấu *
         }
 
         function updateDisplay() {
