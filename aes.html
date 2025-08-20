@@ -10,7 +10,7 @@
         input, button { margin: 5px 0; padding: 10px; width: 300px; }
         .section { margin-bottom: 20px; }
         #toggleShow { width: auto; margin-bottom: 20px; }
-        .result { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 300px; display:inline-block; }
+        .result { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; /* max-width: 300px; */; display:inline-block; }
     </style>
 </head>
 <body>
@@ -26,6 +26,7 @@
         <button id="encryptButton">Encrypt (Mã hoá)</button>
         <br>
         <p id="encryptResult" class="result">Encrypted: </p>
+        <br>
         <button id="copyEncryptResult" style="display:none;">Copy Encrypted Text</button>
     </div>
 
@@ -36,6 +37,7 @@
         <button id="decryptButton">Decrypt (Giải mã)</button>
         <br>
         <p id="decryptResult" class="result">Decrypted: </p>
+        <br>
         <button id="copyDecryptResult" style="display:none;">Copy Decrypted Text</button>
     </div>
 
