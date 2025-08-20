@@ -21,25 +21,25 @@
 
 <div class="section">
     <h3>Encryption (Mã hoá)</h3>
-    <input type="password" id="encryptInput" placeholder="Enter text to encrypt" autocomplete="off">
-    <input type="password" id="encryptKey" placeholder="Enter encryption key" autocomplete="off">
-    <input type="password" id="encryptKeyConfirm" placeholder="Re-enter encryption key" autocomplete="off">
-    <div class="hint">Cả hai trường khóa phải giống nhau để kích hoạt nút mã hoá.</div>
-    <div id="encryptKeyError" class="error">Keys do not match.</div>
+    <input type="password" id="encryptInput" placeholder="Enter text to encrypt (Nội dung cần mã hoá)" autocomplete="off">
+    <input type="password" id="encryptKey" placeholder="Enter encryption key (Khoá mã hoá)" autocomplete="off">
+    <input type="password" id="encryptKeyConfirm" placeholder="Re-enter encryption key (Nhập lại Khoá mã hoá)" autocomplete="off">
+    <div class="hint">[2 key phải giống nhau để kích hoạt nút mã hoá.]</div>
+    <div id="encryptKeyError" class="error">Keys do not match (Nhập đúng 2 key để kích hoạt nút Mã hoá).</div>
     <button id="encryptButton" disabled>Encrypt (Mã hoá)</button>
     <br>
-    <p id="encryptResult" class="result">Encrypted: </p>
+    <p id="encryptResult" class="result">Encrypted (Đã mã hoá): </p>
     <br>
     <button id="copyEncryptResult" style="display:none;">Copy Encrypted Text</button>
 </div>
 
 <div class="section">
     <h3>Decryption (Giải mã)</h3>
-    <input type="password" id="decryptInput" placeholder="Enter text to decrypt" autocomplete="off">
-    <input type="password" id="decryptKey" placeholder="Enter decryption key" autocomplete="off">
+    <input type="password" id="decryptInput" placeholder="Enter text to decrypt (Nội dung cần giải mã)" autocomplete="off">
+    <input type="password" id="decryptKey" placeholder="Enter decryption key (Khoá giải mã)" autocomplete="off">
     <button id="decryptButton">Decrypt (Giải mã)</button>
     <br>
-    <p id="decryptResult" class="result">Decrypted: </p>
+    <p id="decryptResult" class="result">Decrypted (Đã giải mã): </p>
     <br>
     <button id="copyDecryptResult" style="display:none;">Copy Decrypted Text</button>
 </div>
